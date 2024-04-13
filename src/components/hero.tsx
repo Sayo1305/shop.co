@@ -15,7 +15,7 @@ const Hero = () => {
                   your individuality and cater to your sense of style.
             </div>
             <div className='w-11/12 px-10 md:mx-auto my-6 '>        
-                      <Button className='text-white bg-black hover:!bg-black rounded-3xl px-10 py-5 flex items-center justify-center'>Shop now</Button>
+                      <Button size='large' className='!text-white !bg-black hover:!bg-black !rounded-3xl hover:!border-none px-10 py-5 flex items-center justify-center'>Shop now</Button>
             </div>
             <div className='flex items-center sm:gap-5 gap-10  sm:w-11/12 w-full px-10  flex-wrap sm:flex-nowrap  md:mx-auto'>
                   <div>

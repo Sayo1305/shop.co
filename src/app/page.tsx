@@ -7,6 +7,9 @@ import prada from "../../public/images/prada.png";
 import calvin from "../../public/images/calvin.png";
 import Image from "next/image";
 import NewArrival from "@/components/newArrival";
+import TopSelling from "@/components/topSelling";
+import DressStyleCom from "@/components/dressStyleCom";
+import Footer from "@/components/footer";
 export default function Home() {
    return (
       <main>
@@ -30,6 +33,9 @@ export default function Home() {
           </div>
          </div>
          <NewArrival/>
+         <TopSelling/>
+         <DressStyleCom/>
+         <Footer/>
       </main>
    );
 }
