@@ -1,7 +1,29 @@
+/** @format */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:where(.css-dev-only-do-not-override-9cg8vf).ant-modal .ant-modal-content{
-      padding: 0 !important;
+:where(.css-dev-only-do-not-override-9cg8vf).ant-modal .ant-modal-content {
+   padding: 0 !important;
+}
+
+.font_inter_custom {
+   font-family: var(--font-inter);
+}
+
+.font_code_custom {
+   font-family: var(--font-code);
+}
+
+.font_rubik_custom {
+      font-family: var(--font-rubik);
+}
+
+.font_montserrat_custom {
+      font-family: var(--font-rubik);
+}
+
+.font_lato_custom {
+      font-family: var(--font-lato);
 }

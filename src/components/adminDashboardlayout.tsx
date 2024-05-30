@@ -27,7 +27,7 @@ const AdminDashboardLayout: React.FC<Props> = ({ children }) => {
    return (
       <div>
          {/*  screen */}
-         <div className="w-full items-stretch flex min-h-screen">
+         <div className="w-full font_code_custom items-stretch flex min-h-screen">
             <div className="w-2/12 flex grow items-center gap-2 border-r py-5 flex-col bg-[#F9F9F9] min-h-screen">
                <div
                   className="cursor-pointer md:block hidden mb-5 font-bold text-2xl"
@@ -131,7 +131,7 @@ const AdminDashboardLayout: React.FC<Props> = ({ children }) => {
                      </div>
                   </div>
                </div>
-               {children}
+               <div className="w-full overflow-y-auto font_code_custom h-[90vh]"> {children}</div>
             </div>
          </div>
       </div>

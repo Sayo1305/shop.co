@@ -119,7 +119,7 @@ const page = () => {
 
    const handleUpload = async(values : any)=>{
       try{
-         console.log(values)
+         // console.log(values)
          setLoading(true);
          const form_data = new FormData();
          if (fileList) {

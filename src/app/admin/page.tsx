@@ -20,7 +20,6 @@ const PasswordMatcher = ()=>{
                   const res = await signIn('credentials', { 
                         username: "admin@gmail.com", 
                         password: value.password,
-                        // redirect : false,
                         redirect : true,
                    });
             }catch(err){

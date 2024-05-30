@@ -1,28 +1,31 @@
+/** @format */
+
 import { NEXT_PUBLIC_API_BASE_URL } from "../../../../../config";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
    if (req.method === "POST") {
       try {
-         const body = await req.json();
-         const token  = req.headers.get("authorization") || "";
-         const res = await fetch(`${NEXT_PUBLIC_API_BASE_URL}/variation/create_varriation_option`, {
+         const body = await req.formData();
+         const { searchParams } = new URL(req.url);
+         const id = searchParams.get("id");
+         const token = req.headers.get("authorization") || "";
+         const res = await fetch(`${NEXT_PUBLIC_API_BASE_URL}/product/update_product?id=${id}`, {
             method: "POST",
             headers: {
-               "Content-Type": "application/json",
                authorization: token,
             },
-            body: JSON.stringify(body),
+            body: body,
          });
-         if(res.ok){
+         if (res.ok) {
             const data = await res.json();
             return Response.json({ data }, { status: 200 });
-         }else{
-            return Response.error()
+         } else {
+            return Response.error();
          }
       } catch (error) {
          console.log(error);
-         return Response.json({ msg: "Error" , error : error }, { status: 404 });
+         return Response.json({ msg: "Error", error: error }, { status: 404 });
       }
    } else {
       return Response.json({ msg: "method not allowed" }, { status: 403 });

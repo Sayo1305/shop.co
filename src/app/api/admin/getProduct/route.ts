@@ -1,18 +1,16 @@
 import { NEXT_PUBLIC_API_BASE_URL } from "../../../../../config";
 import { NextRequest } from "next/server";
 
-export async function POST(req: NextRequest) {
-   if (req.method === "POST") {
+export async function GET(req: NextRequest) {
+   if (req.method === "GET") {
       try {
-         const body = await req.json();
          const token  = req.headers.get("authorization") || "";
-         const res = await fetch(`${NEXT_PUBLIC_API_BASE_URL}/variation/create_varriation_option`, {
-            method: "POST",
+         const res = await fetch(`${NEXT_PUBLIC_API_BASE_URL}/product/products`, {
+            method: "GET",
             headers: {
                "Content-Type": "application/json",
                authorization: token,
             },
-            body: JSON.stringify(body),
          });
          if(res.ok){
             const data = await res.json();
