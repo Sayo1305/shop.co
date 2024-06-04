@@ -50,7 +50,7 @@ const page = () => {
          <section>
             <div>
                <h1 className="p-10 font-medium text-2xl">Products</h1>
-               <ul className="grid w-full lg:grid-cols-3 grid-cols-2 px-10">
+               <ul className="grid gap-5 w-full lg:grid-cols-3 grid-cols-2 px-10">
                   {product &&
                      product.length > 0 &&
                      product.map((product) => (

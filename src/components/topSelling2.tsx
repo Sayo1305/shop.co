@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import "react-multi-carousel/lib/styles.css";
 import Carousel from "react-multi-carousel";
-
 interface NewArrivalCardProps {
    product: Product;
 }
@@ -67,7 +66,6 @@ const NewArrivalCard: React.FC<NewArrivalCardProps> = ({ product }) => {
                height={100}
             /> */}
          </Carousel>
-
          <div className="text-sm w-full font_lato_custom px-2 my-5 font-medium">
             <div>
                {product.name.substring(0, 40)} {product.name.length > 40 && "..."}
@@ -111,7 +109,7 @@ interface Product {
    productCategoriesTable: ProductCategory;
 }
 
-const TopSelling: React.FC = () => {
+const TopSelling2: React.FC = () => {
    const [products, setProducts] = useState<Product[]>([]);
    const [loading, setLoading] = useState<boolean>(false);
 
@@ -120,7 +118,7 @@ const TopSelling: React.FC = () => {
    const fetchTopSellingProducts = useCallback(async () => {
       try {
          setLoading(true);
-         const response = await fetch("/api/client/getTopProduct?category_id=6&limit=4");
+         const response = await fetch("/api/client/getTopProduct?category_id=5&limit=4");
          const data = await response.json();
          if (response.ok) {
             console.log(data?.data?.data);
@@ -140,8 +138,10 @@ const TopSelling: React.FC = () => {
    }, [fetchTopSellingProducts]);
 
    return (
-      <div className="px-16 sm:py-10 py-5">
-         <div className="text-5xl font-extrabold text-center w-full py-16">TOP SELLING</div>
+      <div className="px-16 sm:py-0 py-5">
+         <div className="text-5xl font-extrabold text-center w-full py-12">
+            TOP SELLING GARMENTS
+         </div>
          {loading ? (
             <div className="text-center animate-pulse justify-between gap-5 my-3 flex flex-wrap">
                <div className="w-[300px] h-[250px] rounded-md bg-slate-200"></div>
@@ -171,4 +171,4 @@ const TopSelling: React.FC = () => {
    );
 };
 
-export default TopSelling;
+export default TopSelling2;

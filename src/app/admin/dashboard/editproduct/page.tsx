@@ -5,8 +5,9 @@ import AdminDashboardLayout from "@/components/adminDashboardlayout";
 import { Input, Button, Modal, Upload, notification } from "antd";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
+import VariationOptionCard from "@/components/variationOptionCard";
 
 const page = () => {
    interface Product {
@@ -43,9 +44,69 @@ const page = () => {
    const [newQuantity, setNewQuantity] = useState<number>(0);
    const [openEditImages, setOpenEditImages] = useState<boolean>(false);
    const [variationList, setVariationList] = useState<variationType[]>([]);
-   const [variationOptions, setVariationOptions] = useState<VariantItem[]>([]);
+   const [selectVariationOption, setSelectVariationOption] = useState<VariantItem[]>([]);
    const [newImages, setNewImages] = useState<string[]>([]);
    const [fileList, setFileList] = useState<any[]>();
+   const [savingOptions, setSavingOptions] = useState<boolean>(false);
+   const downloadAllImages = () => {
+      product?.image_url.forEach((url) => {
+         const link = document.createElement("a");
+         link.href = url;
+         link.download = url.split("/").pop() || "download"; // Extracts the filename from the URL
+         document.body.appendChild(link);
+         link.click();
+         document.body.removeChild(link);
+      });
+   };
+
+   const fetchVariationOptions = useMemo(() => {
+      return async () => {
+         try {
+            const res = await fetch(`/api/admin/getProductVariationOption?id=${id}`, {
+               method: "GET",
+               headers: {
+                  "Content-Type": "application/json",
+                  authorization: `Bearer ${session?.user?.token}`,
+               },
+            });
+            if (res.ok) {
+               const data = await res.json();
+               setSelectVariationOption(data.data?.data);
+            } else {
+               const data = await res.json();
+               console.error(data);
+               notification.error({ message: "Error in fetching data" });
+            }
+         } catch (err) {
+            console.error("Error in fetching data: ", err);
+            notification.error({ message: "Error in fetching data" });
+         }
+      };
+   }, [variationList]);
+
+   const handle_save_options = async () => {
+      try {
+         setSavingOptions(true);
+         const res = await fetch("/api/admin/postAddProductVariation", {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+               authorization: `Bearer ${session?.user?.token}`,
+            },
+            body: JSON.stringify({
+               product_id: id,
+               variation_options: selectVariationOption,
+            }),
+         });
+         if (res.ok) {
+            notification.success({ message: "Sucessfully added" });
+         }
+      } catch (er) {
+         console.error(er);
+      } finally {
+         setSavingOptions(false);
+      }
+   };
    const [product, setProduct] = useState<Product>();
 
    const handle_fetch_product = async () => {
@@ -111,14 +172,14 @@ const page = () => {
 
    const handleImageChange = (fileList: FileList | null) => {
       if (fileList) {
-          const filesArray: File[] = Array.from(fileList);
-          const imageUrls: string[] = filesArray.map(file => URL.createObjectURL(file));
-          setNewImages(imageUrls);
-          setFileList(filesArray);
+         const filesArray: File[] = Array.from(fileList);
+         const imageUrls: string[] = filesArray.map((file) => URL.createObjectURL(file));
+         setNewImages(imageUrls);
+         setFileList(filesArray);
       }
-  };
+   };
 
-  useEffect(() => {
+   useEffect(() => {
       const handle_fetch = async () => {
          try {
             const res = await fetch("/api/admin/postGetVariationByCategory", {
@@ -143,12 +204,9 @@ const page = () => {
       };
       if (session && product?.category_id !== -5 && product) {
          handle_fetch();
+         fetchVariationOptions();
       }
    }, [session, product]);
-
-
-  
-  
 
    return (
       <AdminDashboardLayout>
@@ -344,22 +402,40 @@ const page = () => {
                </div>
                <div className="my-3 bg-black w-full h-1"></div>
 
-               <div className="flex items-center gap-5">
-                        {variationList?.length > 0 &&
-                           variationList.map((variation: variationType) => {
-                              return (
-                                 <div
-                                    onClick={() => {
-                                    //    handle_variation_list(variation.variation_id);
-                                    }}
-                                    className={`px-10 py-2  rounded-md  border cursor-pointer border-black`}
-                                 >
-                                    {variation.name}
-                                 </div>
-                              );
-                           })}
-                        {variationList.length === 0 && <div>no varriations exists</div>}
-                     </div>
+               {/* <div>
+                  <div onClick={()=>{downloadAllImages()}} className="px-4 inline py-2 bg-black text-white rounded-md">Download All images</div>
+               </div> */}
+               <div className="flex my-5 items-start justify-start flex-wrap gap-5">
+                  {variationList?.length > 0 &&
+                     variationList.map((variation: variationType) => {
+                        return (
+                           <VariationOptionCard
+                              title={variation.name}
+                              id={variation.variation_id}
+                              selectVariationOption={selectVariationOption}
+                              setSelectVariationOption={setSelectVariationOption}
+                           />
+                        );
+                     })}
+                  {variationList.length === 0 && <div>no varriations exists</div>}
+               </div>
+               <div className="flex items-center gap-2">
+                  <button
+                     onClick={() => {
+                        handle_save_options();
+                     }}
+                     className="px-4 py-1 border rounded-md"
+                  >
+                     save
+                  </button>
+                  {savingOptions && (
+                     <img
+                        className="w-6 h-6 animate-spin"
+                        src="https://www.svgrepo.com/show/199956/loading-loader.svg"
+                        alt="Loading icon"
+                     />
+                  )}
+               </div>
             </section>
          )}
       </AdminDashboardLayout>

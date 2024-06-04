@@ -1,13 +1,10 @@
 "use client";
-import { setPassword, setToken } from '@/lib/features/admin/passwordSlice';
-import { RootState } from '@/lib/store';
-import { Avatar, Button, Form, Input, notification } from 'antd'
+import { Avatar, Button, Form, notification } from 'antd'
 import FormItem from 'antd/es/form/FormItem';
 import Password from 'antd/es/input/Password';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react'
 const PasswordMatcher = ()=>{
       const router = useRouter();
       const {data : session , status} = useSession();
