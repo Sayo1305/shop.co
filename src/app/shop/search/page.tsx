@@ -17,6 +17,7 @@ interface Product {
    description: string;
    quantity: number;
    ratings: number;
+   header_image_url : string;
    image_url: string[];
    price: number;
    created_at: string; // Use Date if you will parse the string to a Date object
@@ -105,7 +106,7 @@ const page = () => {
 
    useEffect(() => {
       filterProducts(Products, priceRange, selectedColors, selectedSizes);
-   }, [priceRange, selectedColors, Products]);
+   }, [priceRange, selectedColors, Products , selectedSizes]);
 
    const filterProducts = (
       products: Product[],
@@ -130,6 +131,7 @@ const page = () => {
                   variation.variation_name === "size" &&
                   sizes.includes(variation.variation_option_name)
             );
+
          return isWithinPriceRange && hasSelectedColors && hasSelectedSizes;
       });
       setFilteredProducts(filtered);
@@ -167,7 +169,7 @@ const page = () => {
             />
          </div>
 
-         <div className="px-16 w-full flex items-start gap-5 mt-5 justify-between">
+         <div className="px-16 w-full flex items-start gap-10 mt-5 justify-between">
             <div className="w-3/12 md:block hidden">
                <div className="p-3 rounded-xl border">
                   <div className="w-full flex items-center justify-between">
@@ -196,9 +198,7 @@ const page = () => {
                               <div
                                  key={color}
                                  className={`w-7 h-7 border border-black rounded-full ${
-                                    selectedColors.includes(color)
-                                       ? "border-4  shadow-md"
-                                       : ""
+                                    selectedColors.includes(color) ? "border-4  shadow-md" : ""
                                  }`}
                                  style={{ backgroundColor: color }}
                                  onClick={() => handleColorClick(color)}
@@ -229,11 +229,14 @@ const page = () => {
                   )}
 
                   <div className="w-full h-[0.5px] bg-gray-400 my-2"></div>
-                  <button onClick={()=>{
-                     setPriceRange([0, 10000]);
-                     setSelectedColors([]);
-                     setSelectedSizes([]);
-                  }} className="w-full my-4 rounded-lg bg-white text-black  border-[2px] border-black p-2">
+                  <button
+                     onClick={() => {
+                        setPriceRange([0, 10000]);
+                        setSelectedColors([]);
+                        setSelectedSizes([]);
+                     }}
+                     className="w-full my-4 rounded-lg bg-white text-black  border-[2px] border-black p-2"
+                  >
                      Reset filters
                   </button>
                   <button className="w-full rounded-lg bg-black text-white p-2">
@@ -269,7 +272,7 @@ const page = () => {
                            <div className="w-full">
                               <Image
                                  className="w-full rounded-t-2xl bg-slate-200 bg-contain h-[200px]"
-                                 src={product.image_url[0]}
+                                 src={product.header_image_url}
                                  width={100}
                                  height={100}
                                  alt={product.name}

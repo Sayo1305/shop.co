@@ -9,6 +9,7 @@ import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
+import Markdown from 'react-markdown'
 import { Rate } from "antd";
 
 interface product_category {
@@ -65,9 +66,6 @@ const page = () => {
          }
       };
    }, []);
-   {
-      console.log(productDetails);
-   }
 
    useEffect(() => {
       handle_fetch();
@@ -139,8 +137,10 @@ const page = () => {
                      <div className="flex text-5xl font-semibold text-slate-900 items-center gap-5 my-10">
                         ₹ {productDetails.price}/-
                      </div>
-                     <div className="flex text-sm text-slate-500 tracking-wide leading-relaxed items-center gap-5 my-10">
+                     <div className=" text-sm text-slate-500 tracking-wide leading-relaxed  my-10">
+                        <Markdown>
                         {productDetails.description}
+                        </Markdown>
                      </div>
                      <div className="flex text-sm items-center gap-5 my-10">
                         <div className="w-full font-semibold text-lg cursor-pointer font_lato_custom  bg-black text-white p-3 text-center flex items-center justify-center gap-5 rounded-2xl">

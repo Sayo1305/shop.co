@@ -143,7 +143,7 @@ const page = () => {
             body: form_data as FormData
          });
          if(res.ok){
-            console.log("done");
+            // console.log("done");
          }
       }catch(err){
          console.error(err);

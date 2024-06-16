@@ -4,7 +4,7 @@ import React from 'react'
 
 const page = () => {
       const {data  : session , status} = useSession();
-      console.log(session , status)
+      // console.log(session , status)
   return (
     <div onClick={()=>{signIn()}}>page</div>
   )

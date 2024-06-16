@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
    if (req.method === "POST") {
       try {
          const body = await req.json();
-         console.log(body)
+         // console.log(body)
          const token  = req.headers.get("authorization") || "";
          const res = await fetch(`${NEXT_PUBLIC_API_BASE_URL}/category/delete_category`, {
             method: "POST",

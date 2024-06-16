@@ -17,13 +17,50 @@
 }
 
 .font_rubik_custom {
-      font-family: var(--font-rubik);
+   font-family: var(--font-rubik);
 }
 
 .font_montserrat_custom {
-      font-family: var(--font-rubik);
+   font-family: var(--font-rubik);
 }
 
 .font_lato_custom {
-      font-family: var(--font-lato);
+   font-family: var(--font-lato);
+}
+
+/* andt */
+
+.certain-category-search-dropdown .ant-select-dropdown-menu-item-group-title {
+   color: #666;
+   font-weight: bold;
+}
+
+.certain-category-search-dropdown .ant-select-dropdown-menu-item-group {
+   border-bottom: 1px solid #f6f6f6;
+}
+
+.certain-category-search-dropdown .ant-select-dropdown-menu-item {
+   padding-left: 16px;
+}
+
+.certain-category-search-dropdown .ant-select-dropdown-menu-item.show-all {
+   text-align: center;
+   cursor: default;
+}
+
+.certain-category-search-dropdown .ant-select-dropdown-menu {
+   max-height: 300px;
+}
+
+:where(.css-dev-only-do-not-override-9cg8vf).ant-select-outlined:not(.ant-select-customize-input)
+   .ant-select-selector {
+   border: 0 !important;
+   background: transparent !important;
+   outline: none !important;
+   box-shadow: none !important;
+}
+
+:where(.css-dev-only-do-not-override-9cg8vf).ant-select-single.ant-select-lg:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-search-input
+{
+   height: auto !important;;
 }

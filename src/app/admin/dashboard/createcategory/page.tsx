@@ -71,7 +71,7 @@ const page = () => {
             notification.success({ message: "Category deleted successfully" });
          }else{
             const data = await res.json();
-            console.log(data);
+            //console.log(data);
             notification.error({ message: "Error in deleting category" });
          }
       }catch(err){
@@ -95,11 +95,11 @@ const page = () => {
          });
          if (res.ok) {
             const data = await res.json();
-            console.log(data);
+            //console.log(data);
             notification.success({ message: "Category created successfully" });
          } else {
             const data = await res.json();
-            console.log(data);
+            //console.log(data);
             notification.error({ message: "Error in creating category" });
          }
       } catch (err) {

@@ -47,7 +47,7 @@ const EditCategoryModal: React.FC<ChildProps> = ({ open, setOpen, selectedCatego
                      notification.success({ message: "Category edited successfully" });
                   }else{
                      const data = await res.json();
-                     console.log(data);
+                     // console.log(data);
                      notification.error({ message: "Error in editing category" });
                   }
             }catch(err){
