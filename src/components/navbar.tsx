@@ -13,7 +13,7 @@ const Navbar = (): React.JSX.Element => {
    const [search, setSearch] = useState<string>("");
    const router = useRouter();
    const handleKeyPress = (event: any) => {
-         router.push(`/shop/search?topic=${search}`);
+      router.push(`/shop/search?topic=${search}`);
    };
 
    const renderTitle = (title: string) => (
@@ -104,6 +104,7 @@ const Navbar = (): React.JSX.Element => {
                </AutoComplete>
                <SearchOutlined
                   onClick={(e) => {
+                     if(search !== "")
                      handleKeyPress(e);
                   }}
                   className="sm:!flex hidden bg-gray-300 rounded-e-3xl !p-2 cursor-pointer !px-4"

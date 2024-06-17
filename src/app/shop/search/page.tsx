@@ -17,7 +17,7 @@ interface Product {
    description: string;
    quantity: number;
    ratings: number;
-   header_image_url : string;
+   header_image_url: string;
    image_url: string[];
    price: number;
    created_at: string; // Use Date if you will parse the string to a Date object
@@ -52,7 +52,7 @@ const page = () => {
       try {
          setLoading(true);
          const res = await fetch(
-            `${NEXT_PUBLIC_API_BASE_URL}/product/search?title=${search}&&page=${1}&&limit=${10}`,
+            `${NEXT_PUBLIC_API_BASE_URL}/product/search?title=${search}&&page=${pageNumber}&&limit=${10}`,
             {
                method: "GET",
                headers: {
@@ -102,11 +102,11 @@ const page = () => {
 
    useEffect(() => {
       handle_search();
-   }, [search]);
+   }, [search , pageNumber]);
 
    useEffect(() => {
       filterProducts(Products, priceRange, selectedColors, selectedSizes);
-   }, [priceRange, selectedColors, Products , selectedSizes]);
+   }, [priceRange, selectedColors, Products, selectedSizes]);
 
    const filterProducts = (
       products: Product[],
@@ -301,6 +301,7 @@ const page = () => {
                <div className="my-5">
                   {loading === false && filteredProducts?.length > 0 && (
                      <Pagination
+                     onChange={(number  : number)=> {setPageNumber(number)}}
                         defaultCurrent={pageNumber}
                         total={total}
                      />
