@@ -1,12 +1,8 @@
 import AdminDashboardLayout from '@/components/adminDashboardlayout';
 import { LogoutOutlined } from '@ant-design/icons';
-import React, { ReactNode } from 'react';
+import React from 'react';
 
-interface Props {
-  children: ReactNode;
-}
-
-const Page: React.FC<Props> = ({ children }) => (
+const Page = () => (
   <AdminDashboardLayout>
     <div className='flex w-full items-center justify-center gap-5 flex-col h-[75vh]'>
       <div className='text-3xl font-medium'>Admin Pannel</div>

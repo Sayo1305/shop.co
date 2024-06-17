@@ -1,5 +1,5 @@
 /** @format */
-
+export const dynamic = 'force-dynamic'
 import type { Metadata } from "next";
 import { Inter, Source_Code_Pro, Lato, Rubik, Montserrat } from "next/font/google";
 import "./globals.css";

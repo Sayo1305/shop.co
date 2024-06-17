@@ -1,18 +1,10 @@
 /** @format */
 
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GitHubProvider from "next-auth/providers/github";
 import { NEXT_PUBLIC_API_BASE_URL } from "../../../../../config";
 
-interface CustomUser {
-   name?: string;
-   email?: string;
-   image?: string;
-   token?: string; // Define token property in the user object
- }
- 
-export const authConfig: NextAuthOptions = {
+const authConfig = {
    providers: [
       CredentialsProvider({
          name: "credentials",
@@ -54,10 +46,6 @@ export const authConfig: NextAuthOptions = {
                return null;
             }
          },
-      }),
-      GitHubProvider({
-         clientId: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID || "",
-         clientSecret: process.env.NEXT_PUBLIC_GITHUB_SECRET_ID || "",
       }),
    ],
    callbacks: {
