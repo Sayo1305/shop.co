@@ -1,3 +1,12 @@
+## screenshot
+<img width="1436" alt="Screenshot 2024-06-21 at 10 02 39 PM" src="https://github.com/Sayo1305/shop.co/assets/84987518/89d9c61d-3c9e-4909-ae04-9ca39b0f242c">
+<img width="1436" alt="Screenshot 2024-06-21 at 10 03 57 PM" src="https://github.com/Sayo1305/shop.co/assets/84987518/0dda2166-64d9-4c93-afa6-8b71a8f1f141">
+<img width="1436" alt="Screenshot 2024-06-21 at 10 03 35 PM" src="https://github.com/Sayo1305/shop.co/assets/84987518/6773b9c4-15b9-4a70-a748-3912dfc35284">
+<img width="1436" alt="Screenshot 2024-06-21 at 10 03 35 PM" src="https://github.com/Sayo1305/shop.co/assets/84987518/46f50c04-df91-47af-b3a8-44390f1473e0">
+<img width="1435" alt="Screenshot 2024-06-21 at 10 02 33 PM" src="https://github.com/Sayo1305/shop.co/assets/84987518/6e29baac-e484-4aab-a73c-a25e4cbe2a7f">
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## atribution
