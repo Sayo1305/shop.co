@@ -1,12 +1,47 @@
 /** @format */
-
-import { Button, Form, Input } from "antd";
+"use client";
+import { Button, Form, Input, notification } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import Password from "antd/es/input/Password";
 import Image from "next/image";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { NEXT_PUBLIC_API_BASE_URL } from "../../../config";
 
 const page = () => {
+   const router = useRouter();
+   const [loading, setLoading] = useState<boolean>(false);
+   const handle_signup = async (value: any) => {
+      try {
+         if (
+            value?.password === undefined ||
+            value?.name === undefined ||
+            value?.email === undefined
+         ) {
+            notification.error({ message: "All fields are required" });
+            return;
+         }
+         setLoading(true);
+         const res  = await  fetch(`${NEXT_PUBLIC_API_BASE_URL}/user/create_user` , {
+            method : "POST" , 
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify(value),
+         });
+         if(res.ok){
+            notification.success({ message: "Account created successfully" });
+            router.push("/login");
+         }else{
+            notification.error({ message: "Something went wrong" });
+         }
+      } catch (err) {
+         console.error(err);
+         notification.error({ message: "Something went wrong" });
+      } finally {
+         setLoading(false);
+      }
+   };
    return (
       <div className="w-full min-h-screen flex items-start justify-between">
          <Image
@@ -24,24 +59,52 @@ const page = () => {
                <Form
                   className="w-1/2"
                   layout="vertical"
+                  onFinish={handle_signup}
                >
-                  <FormItem label="name">
+                  <FormItem
+                     label="name"
+                     name={"name"}
+                  >
                      <Input className="!outline-none w-full !border-l-0 !border-r-0 !rounded-none !shadow-none !border-t-0 !border-b hover:!shadow-none !border-black !bg-transparent" />
                   </FormItem>
-                  <FormItem label="email">
+                  <FormItem
+                     label="email"
+                     name={"email"}
+                  >
                      <Input className="!outline-none w-full !border-l-0 !border-r-0 !rounded-none !shadow-none !border-t-0 !border-b hover:!shadow-none !border-black !bg-transparent" />
                   </FormItem>
-                  <FormItem label="password">
+                  <FormItem
+                     label="password"
+                     name={"password"}
+                  >
                      <Password className="!outline-none w-full !border-l-0 !border-r-0 !rounded-none !shadow-none !border-t-0 !border-b hover:!shadow-none !border-black !bg-transparent" />
                   </FormItem>
-                  <div className="mx-auto w-full flex items-center justify-center">
-                     <button className="w-1/2 bg-black py-2 px-2 text-white rounded-md">
-                        Login
+                  <div className="mx-auto w-full flex gap-5 items-center justify-center">
+                     <button
+                        disabled={loading === true}
+                        className="w-1/2 bg-black py-2 px-2 text-white rounded-md"
+                     >
+                        Create account
                      </button>
+                     {loading && (
+                        <img
+                           className="w-8 h-8 animate-spin"
+                           src="https://www.svgrepo.com/show/199956/loading-loader.svg"
+                           alt="Loading icon"
+                        />
+                     )}
                   </div>
                </Form>
                <div className="py-2 text-sm italic text-[#a13f30]">
-                  New to Shop.co? <span className="cursor-pointer">Signup</span>
+                  Already customer?{" "}
+                  <span
+                     onClick={() => {
+                        router.push("/login");
+                     }}
+                     className="cursor-pointer"
+                  >
+                     login
+                  </span>
                </div>
             </div>
          </div>

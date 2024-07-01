@@ -13,6 +13,9 @@ import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import Markdown from "react-markdown";
 import { Rate } from "antd";
+import { NEXT_PUBLIC_API_BASE_URL } from "../../../../config";
+import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
 interface product_category {
    category_id: number;
@@ -38,11 +41,13 @@ interface productDetails {
 const page = () => {
    const searchParams = useSearchParams();
    const router = useRouter();
+   const { data: session, status } = useSession() as any;
    const product_id = searchParams.get("product_id");
    const [productDetails, setProductDetails] = useState<productDetails>();
    const [loading, setLoading] = useState<boolean>(false);
    const [suggestedProduct, setSuggestedProduct] = useState<productDetails[]>([]);
    const [currentImage, setCurrentImage] = useState<string>("");
+   const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
    const carouselRef = useRef(null);
 
@@ -66,15 +71,79 @@ const page = () => {
       },
    };
 
+   const remove_fav = async () => {
+      const res = await fetch(`${NEXT_PUBLIC_API_BASE_URL}/favourite/add_to_fav`, {
+         method: "POST",
+         headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${session?.user?.token}`,
+         },
+         body: JSON.stringify({
+            product_id: product_id,
+         }),
+      });
+      if (res.ok) {
+         toast.success("Added to the list");
+         setIsFavorite(true);
+      }
+   };
+   const add_fav = async () => {
+      const res = await fetch(`${NEXT_PUBLIC_API_BASE_URL}/favourite/remove_from_fav`, {
+         method: "POST",
+         headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${session?.user?.token}`,
+         },
+         body: JSON.stringify({
+            product_id: product_id,
+         }),
+      });
+      if (res.ok) {
+         toast.success("Remove from the list");
+         setIsFavorite(false);
+      }
+   };
+
+   const handle_fav = async () => {
+      try {
+         if (!isFavorite) {
+            await remove_fav();
+         } else {
+            await add_fav();
+         }
+      } catch (er) {
+         toast.error("Error while performing");
+         console.log(er);
+      }
+   };
+
+   const handleFetchFav = async ()=>{
+      try{
+         const res = await fetch(`${NEXT_PUBLIC_API_BASE_URL}/favourite/get_status_by_id?product_id=${product_id}` , {
+            method  : "GET",
+            headers : {
+               authorization: `Bearer ${session?.user?.token}`,
+            }
+         });
+         if(res.ok){
+            const data = await res.json();
+            setIsFavorite(data?.data?.status);
+         }
+      }catch(err){
+         console.error("Error while fetching fav : " + err);
+      }
+   }
+
    const handle_fetch = useMemo(() => {
       return async () => {
          try {
             setLoading(true);
+            const headers: HeadersInit = {
+               "Content-Type": "application/json",
+            };
             const res = await fetch(`/api/client/getProduct?product_id=${product_id}`, {
                method: "GET",
-               headers: {
-                  "Content-Type": "application/json",
-               },
+               headers: headers,
             });
             if (res.ok) {
                const data = await res.json();
@@ -84,11 +153,11 @@ const page = () => {
             } else {
                const data = await res.json();
                console.error(data);
-               notification.error({ message: "Error in fetching data" });
+               toast.error("Error in fetching data");
             }
          } catch (err) {
             console.error("Error in fetching data: ", err);
-            notification.error({ message: "Error in fetching data" });
+            toast.error("Error in fetching data");
          } finally {
             setLoading(false);
          }
@@ -98,6 +167,11 @@ const page = () => {
    useEffect(() => {
       handle_fetch();
    }, [product_id]);
+   useEffect(()=>{
+      if(session){
+         handleFetchFav();
+      }
+   },[session , product_id]);
    return (
       <section>
          <Navbar />
@@ -181,16 +255,37 @@ const page = () => {
                            </svg>
                            Add to cart
                         </div>
-                        <div className="bg-[#F0F0F0] p-3 rounded-md">
-                           <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              height="24px"
-                              viewBox="0 -960 960 960"
-                              width="24px"
-                              fill="#000"
-                           >
-                              <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" />
-                           </svg>
+                        <div
+                           onClick={() => {
+                              handle_fav();
+                           }}
+                           className="bg-[#F0F0F0] p-3 rounded-md"
+                        >
+                           {isFavorite ? (
+                              <svg
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 width="24"
+                                 height="24"
+                                 fill="currentColor"
+                                 className="bi bi-heart-fill"
+                                 viewBox="0 0 16 16"
+                              >
+                                 <path
+                                    fill-rule="evenodd"
+                                    d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"
+                                 />
+                              </svg>
+                           ) : (
+                              <svg
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 height="24px"
+                                 viewBox="0 -960 960 960"
+                                 width="24px"
+                                 fill="#000"
+                              >
+                                 <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" />
+                              </svg>
+                           )}
                         </div>
                      </div>
                   </div>

@@ -1,5 +1,3 @@
-/** @format */
-
 "use client";
 import { ProfileOutlined, SearchOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Avatar, Input } from "antd";
@@ -8,59 +6,39 @@ import { UserOutlined } from "@ant-design/icons";
 import { AutoComplete } from "antd";
 import React, { useState } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 
 const Navbar = (): React.JSX.Element => {
    const [search, setSearch] = useState<string>("");
+   const { data: session, status } = useSession() as any;
    const router = useRouter();
+
+   interface Item {
+      title: string;
+      category: string;
+   }
+
+   const items: Item[] = [
+      { title: "Watches", category: "Casual" },
+      { title: "Shoes", category: "Casual" },
+      { title: "Watches", category: "Boys" },
+      { title: "Shirts", category: "Boys" },
+      { title: "Laptops", category: "Electronics" },
+      { title: "Mobiles", category: "Electronics" },
+      // Add more items here
+   ];
+   const options = items.map((option) => {
+      return {
+         categories: option.category,
+         ...option,
+      };
+   });
    const handleKeyPress = (event: any) => {
       router.push(`/shop/search?topic=${search}`);
    };
 
-   const renderTitle = (title: string) => (
-      <span>
-         {title}
-         <Link
-            style={{ float: "right" }}
-            href={`/shop/search?topic=${title}`}
-            rel="noopener noreferrer"
-         >
-            more
-         </Link>
-      </span>
-   );
-
-   const renderItem = (title: string) => ({
-      value: title,
-      label: (
-         <div
-            onClick={() => {
-               setSearch(title);
-            }}
-            style={{
-               display: "flex",
-               justifyContent: "space-between",
-            }}
-         >
-            {title}
-            <span></span>
-         </div>
-      ),
-   });
-
-   const options = [
-      {
-         label: renderTitle("casual"),
-         options: [renderItem("Shoes"), renderItem("watches")],
-      },
-      {
-         label: renderTitle("clothes"),
-         options: [renderItem("shirts")],
-      },
-      // {
-      //    label: renderTitle("Articles"),
-      //    options: [renderItem("AntDesign design language")],
-      // },
-   ];
    return (
       <>
          <div className="w-full bg-black py-1 text-center text-white text-xs">
@@ -82,30 +60,31 @@ const Navbar = (): React.JSX.Element => {
                <div>Brands</div>
             </div>
             <div className="md:w-1/3 sm:flex sm:w-1/2 relative hidden ">
-               <AutoComplete
-                  popupClassName="certain-category-search-dropdown"
-                  popupMatchSelectWidth={500}
-                  style={{ width: 250 }}
-                  options={options}
-                  className="!bg-[#F0F0F0] !text-lg sm:!flex !hidden !w-full hover:!border-none !shadow-none hover:!shadow-none hover:!bg-[#F0F0F0] !border-none focus:!border-none !outline-none !rounded-s-3xl !p-2"
-                  size="large"
-               >
-                  <Input
-                     onKeyPress={handleKeyPress}
-                     onChange={(e) => {
-                        setSearch(e.target.value);
-                     }}
-                     value={search}
-                     size="large"
-                     prefix={<SearchOutlined className="text-lg px-2" />}
-                     placeholder="search for product"
-                     className="!bg-[#F0F0F0] !text-lg sm:flex hidden !w-full hover:!border-none !shadow-none hover:!shadow-none hover:!bg-[#F0F0F0] !border-none focus:!border-none outline-none !rounded-3xl p-2"
-                  />{" "}
-               </AutoComplete>
+               <Autocomplete
+                  id="grouped-demo"
+                  onChange={(e, value) => {
+                     setSearch(value?.title || "");
+                  }}
+                  options={options.sort((a, b) => -b.category.localeCompare(a.category))}
+                  groupBy={(option) => option.category}
+                  getOptionLabel={(option) => option.title}
+                  sx={{ width: 300 }}
+                  className="!bg-[#F0F0F0] !text-lg sm:!flex !hidden !w-full hover:!border-none !shadow-none hover:!shadow-none hover:!bg-[#F0F0F0] !border-none focus:!border-none !outline-none"
+                  renderInput={(params) => (
+                     <TextField
+                        onChange={(e) => {
+                           setSearch(e.target.value);
+                        }}
+                        {...params}
+                        variant="outlined"
+                        size="small"
+                        label="Search items"
+                     />
+                  )}
+               />
                <SearchOutlined
                   onClick={(e) => {
-                     if(search !== "")
-                     handleKeyPress(e);
+                     if (search !== "") handleKeyPress(e);
                   }}
                   className="sm:!flex hidden bg-gray-300 rounded-e-3xl !p-2 cursor-pointer !px-4"
                />
@@ -119,8 +98,18 @@ const Navbar = (): React.JSX.Element => {
                />
                <ShoppingCartOutlined />
                <Avatar
+                  className="cursor-pointer"
+                  onClick={() => {
+                     if (session?.user) {
+                        router.push("/shop/profile");
+                     } else {
+                        router.push("/login");
+                     }
+                  }}
                   src={
-                     "https://res.cloudinary.com/dqpirrbuh/image/upload/v1700517682/blank-profile-picture_b84iuc.png"
+                     session
+                        ? session?.user?.profile_pic_url
+                        : "https://res.cloudinary.com/dqpirrbuh/image/upload/v1700517682/blank-profile-picture_b84iuc.png"
                   }
                />
             </div>

@@ -1,5 +1,3 @@
-/** @format */
-
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { NEXT_PUBLIC_API_BASE_URL } from "../../../../../config";
@@ -21,7 +19,11 @@ const authConfig = {
             },
          },
          async authorize(credentials) {
-            if (!credentials || !credentials.username || !credentials.password) {
+            if (
+               !credentials ||
+               !credentials.password ||
+               !credentials.username 
+            ) {
                return null;
             }
             try {
@@ -50,7 +52,7 @@ const authConfig = {
    ],
    callbacks: {
       async signIn({ user, account, profile, email, credentials }) {
-         if (!credentials || !credentials.username || !credentials.password) {
+         if (!credentials || !credentials.username || !credentials.password ) {
             return null;
          }
          try {
@@ -76,19 +78,19 @@ const authConfig = {
          }
       },
       async redirect({ url, baseUrl }) {
-         if (url.includes("/admin")) return `${baseUrl}/admin/dashboard`
-         return baseUrl
+         if (url.includes("/admin")) return `${baseUrl}/admin/dashboard`;
+         return baseUrl;
       },
       async session({ session, user, token }) {
          if (token && token.accessToken) {
             session.user = token.accessToken;
-          }
+         }
          return session;
       },
       async jwt({ token, user, account, profile }) {
          if (user) {
             token.accessToken = user;
-          }
+         }
          return token;
       },
    },

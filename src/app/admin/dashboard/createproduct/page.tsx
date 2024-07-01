@@ -39,7 +39,7 @@ const page = () => {
    const [selectedVariationList, setSelectedVariationList] = useState<number[]>([]);
    const { data: session, status } = useSession() as any;
 
-   const [loading , setLoading] = useState<boolean>(false);
+   const [loading, setLoading] = useState<boolean>(false);
 
    const [fileList, setFileList] = useState<FileList>();
 
@@ -117,41 +117,41 @@ const page = () => {
       setSelectedVariationList(tempList);
    };
 
-   const handleUpload = async(values : any)=>{
-      try{
+   const handleUpload = async (values: any) => {
+      try {
          // console.log(values)
          setLoading(true);
          const form_data = new FormData();
          if (fileList) {
-             Array.from(fileList).forEach((file, index) => {
-                 form_data.append(`files`, file);
-             });
+            Array.from(fileList).forEach((file, index) => {
+               form_data.append(`files`, file);
+            });
          }
 
-         form_data.append('name' , values.name);
-         form_data.append('product_description', values.product_description);
-         form_data.append('category_id', values.category_id);
-         form_data.append('quantity', values.quantity);
-         form_data.append('price', values.price);
-         form_data.append('variation_list' , JSON.stringify(variationList));
-         
+         form_data.append("name", values.name);
+         form_data.append("product_description", values.product_description);
+         form_data.append("category_id", values.category_id);
+         form_data.append("quantity", values.quantity);
+         form_data.append("price", values.price);
+         form_data.append("variation_list", JSON.stringify(variationList));
+
          const res = await fetch("/api/admin/postCreateProduct", {
-            method  : "POST",
+            method: "POST",
             headers: {
                authorization: `Bearer ${session?.user?.token}`,
             },
-            body: form_data as FormData
+            body: form_data as FormData,
          });
-         if(res.ok){
+         if (res.ok) {
             // console.log("done");
          }
-      }catch(err){
+      } catch (err) {
          console.error(err);
-         notification.error({message : "Djdjd"});
-      }finally{
+         notification.error({ message: "Djdjd" });
+      } finally {
          setLoading(false);
       }
-   }
+   };
    return (
       <AdminDashboardLayout>
          <div className="">
@@ -159,7 +159,10 @@ const page = () => {
                Create Product form
             </div>
             <div className="px-10 py-5 h-[78vh] overflow-y-auto">
-               <Form layout="vertical" onFinish={handleUpload}>
+               <Form
+                  layout="vertical"
+                  onFinish={handleUpload}
+               >
                   <FormItem
                      label="image"
                      name="image"
@@ -181,9 +184,16 @@ const page = () => {
                      <div>
                         <div>
                            {Array.from(fileList).map((file, index) => (
-                              <div key={index} className="flex items-center gap-3">
-                                 <DeleteOutlined onClick={()=>{handleDeleteFile(index)}}/>
-                               <div>  {file.name}</div>
+                              <div
+                                 key={index}
+                                 className="flex items-center gap-3"
+                              >
+                                 <DeleteOutlined
+                                    onClick={() => {
+                                       handleDeleteFile(index);
+                                    }}
+                                 />
+                                 <div> {file.name}</div>
                               </div>
                            ))}
                         </div>
@@ -191,7 +201,7 @@ const page = () => {
                   )}
                   <FormItem
                      label="name"
-                     name={'name'}
+                     name={"name"}
                      className="px-10"
                   >
                      <Input
@@ -214,7 +224,7 @@ const page = () => {
                      name="price"
                      className="px-10"
                   >
-                      <Input
+                     <Input
                         type="number"
                         size="large"
                         className="!w-1/2"
@@ -273,14 +283,28 @@ const page = () => {
                         {variationList.length === 0 && <div>no varriations exists</div>}
                      </div>
                   </FormItem>
-                  <FormItem label="quantity" name="quantity">
+                  <FormItem
+                     label="quantity"
+                     name="quantity"
+                  >
                      <Input
                         type="number"
                         size="large"
                         className="!w-1/2"
                      />
                   </FormItem>
-                  <button type="submit" className="px-5 flex items-center gap-2 py-2 rounded-md text-white bg-black">submit {loading === true && <LoadingOutlined className="text-xl"/>}</button>
+                  <button
+                     type="submit"
+                     className="px-5 flex items-center gap-2 py-2 rounded-md text-white bg-black"
+                  >
+                     submit {loading && (
+                  <img
+                     className="w-7 h-7 animate-spin"
+                     src="https://res.cloudinary.com/dqpirrbuh/image/upload/v1719350777/loading-loader-svg_jv6zvi.png"
+                     alt="Loading icon"
+                  />
+               )}
+                  </button>
                </Form>
             </div>
          </div>

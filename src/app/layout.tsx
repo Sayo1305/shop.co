@@ -1,5 +1,5 @@
 /** @format */
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 import type { Metadata } from "next";
 import { Inter, Source_Code_Pro, Lato, Rubik, Montserrat } from "next/font/google";
 import "./globals.css";
@@ -7,6 +7,7 @@ import { ConfigProvider } from "antd";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import StoreProvider from "./StoreProvider";
 import { NextAuthProvider } from "@/utils/nextAuthProvider";
+import { Toaster } from "react-hot-toast";
 
 const inter_init = Inter({
    subsets: ["latin"],
@@ -64,6 +65,7 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
                   <body
                      className={`${sourcecode.variable} ${inter_init.variable} ${montserrat_init.variable} ${lato_init.variable} ${rubik_init.variable} `}
                   >
+                     <Toaster />
                      <AntdRegistry>{children}</AntdRegistry>
                   </body>
                </ConfigProvider>

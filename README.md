@@ -13,6 +13,12 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 <a href="https://www.freepik.com/free-vector/niche-service-marketplace-concept-illustration_18407467.htm#fromView=search&page=2&position=26&uuid=f2017e7f-16b7-4fbb-a87a-995a51125c60">Image by storyset on Freepik</a>
 <a href="https://www.freepik.com/free-vector/shopaholic-horizontal-composition-with-storefront-with-sale-sign-cartoon-characters-family-members-with-goods_6800105.htm#fromView=search&page=2&position=40&uuid=f3999ab1-9888-475f-a0fb-f76e85b6faa9">Image by macrovector on Freepik</a>
 
+
+<a href="https://storyset.com/marketing">Marketing illustrations by Storyset</a>
+
+<a href="https://storyset.com/data">Data illustrations by Storyset</a>
+
+
 ## Getting Started
 
 First, run the development server:
